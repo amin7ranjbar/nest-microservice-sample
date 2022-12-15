@@ -1,0 +1,55 @@
+version: '3.7'
+
+services:
+  gateway:
+    build: ./gateway
+    restart: always
+    hostname: gateway
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    networks:
+      - backend
+
+  auth:
+    build: ./auth
+    restart: always
+    hostname: auth
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - postgres
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    restart: always
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    volumes:
+        - ./Docker/rabbitmq/data/:/var/lib/rabbitmq/
+        - ./Docker/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+        - backend
+
+  postgres:
+    container_name: microservice_postgres
+    image: postgres:${POSTGRES_VERSION}
+    environment:
+      - POSTGRES_USER=${POSTGRES_USERNAME}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DATABASE}
+    ports:
+      - ${POSTGRES_PORT}:5432
+    volumes:
+      - ./Docker/postgres:/var/lib/postgresql/data
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
