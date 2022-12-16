@@ -29,14 +29,15 @@ services:
     image: rabbitmq:3-management-alpine
     restart: always
     container_name: rabbitmq
+    hostname: rabbitmq
     ports:
-        - 5672:5672
-        - 15672:15672
+      - 5672:5672
+      - 15672:15672
     volumes:
-        - ./docker/rabbitmq/data/:/var/lib/rabbitmq/
-        - ./docker/rabbitmq/log/:/var/log/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
+      - rabbitmq_log:/var/log/rabbitmq
     networks:
-        - backend
+      - backend
 
   postgres:
     container_name: postgres
@@ -48,9 +49,14 @@ services:
     ports:
       - ${POSTGRES_PORT}:5432
     volumes:
-      - ./docker/postgres:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - backend
+
+volumes:
+  rabbitmq_data:
+  rabbitmq_log:
+  postgres_data:
 
 networks:
   backend:
