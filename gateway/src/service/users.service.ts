@@ -1,15 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
+import { RmqService } from 'nest-rabbitmq';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy,
-  ) {}
+  constructor(private readonly rmqService: RmqService) {}
 
   async getHello() {
-    return await this.userServiceClient.send<any>('hello_world', {
-      message: 'Hello World',
+    return await this.rmqService.request({
+      routingKey: 'user.messages',
+      payload: {
+        message: 'Hello World',
+      },
     });
   }
 }
