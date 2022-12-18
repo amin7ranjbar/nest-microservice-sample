@@ -5,12 +5,11 @@ import { RmqService } from 'nest-rabbitmq';
 export class UsersService {
   constructor(private readonly rmqService: RmqService) {}
 
-  async getHello() {
+  async getHello(payload) {
+    payload.message = 'Hello World';
     return await this.rmqService.request({
       routingKey: 'user.messages',
-      payload: {
-        message: 'Hello World',
-      },
+      payload,
     });
   }
 }

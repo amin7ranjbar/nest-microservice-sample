@@ -54,9 +54,9 @@ services:
       - backend
 
   jaeger:
+    container_name: jaeger
     image: jaegertracing/all-in-one:latest
-    environment:
-      - COLLECTOR_ZIPKIN_HTTP_PORT=9411
+    hostname: jaeger
     ports:
       - "5775:5775/udp"
       - "6831:6831/udp"
@@ -64,7 +64,6 @@ services:
       - "5778:5778"
       - "16686:16686"
       - "14268:14268"
-      - "9411:9411"
     networks:
       - backend
 

@@ -1,4 +1,4 @@
-FROM node:14.8.0-alpine
+FROM node:14.21.2-alpine3.16
 RUN npm install -g npm@6.14.7
 RUN mkdir -p /var/www/auth
 WORKDIR /var/www/auth
