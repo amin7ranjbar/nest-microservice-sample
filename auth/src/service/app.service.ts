@@ -4,13 +4,15 @@ import { Rpc } from "nest-rabbitmq";
 @Injectable()
 export class AppService {
   @Rpc({ routingKey: "user.messages" })
-  getHello(body: any): string {
-    const random = Math.floor(
-      Math.random() * (10)
-    )
+  getHello(body: any): any {
+    const random = Math.floor(Math.random() * 10);
     if (random % 2 == 0) {
-      return `message from auth-service : ${body.message}`;
+      return {
+        statusCode: 200,
+        message: "success",
+        data: `message from auth-service : ${body.message}`,
+      };
     }
-    throw new HttpException("error" , 400);
+    throw new HttpException("error", 400);
   }
 }

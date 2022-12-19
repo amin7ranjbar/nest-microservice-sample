@@ -1,16 +1,18 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { JaegerModule } from 'nest-jaeger-tracing';
 import { RmqModule } from 'nest-rabbitmq';
 import { UsersModule } from './users.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     RmqModule.register({
-      uri: 'amqp://guest:guest@rabbitmq:5672',
+      uri: process.env.RABBITMQ_URL,
     }),
     JaegerModule.register({
-      serviceName: 'gateway',
-      agentHost: 'jaeger',
+      serviceName: process.env.npm_package_name,
+      agentHost: process.env.JAEGER_AGENT_HOST,
     }),
     UsersModule,
   ],

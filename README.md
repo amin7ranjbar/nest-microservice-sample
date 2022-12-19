@@ -9,6 +9,12 @@ simple microservice template via nestjs
 cp .env.example .env
 ```
 ```
+cp ./gateway/.env.example ./gateway/.env
+```
+```
+cp ./auth/.env.example ./auth/.env
+```
+```
 docker-compose build --no-cache
 ```
 ```
